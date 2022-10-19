@@ -1,6 +1,9 @@
 import "./style.scss"
+import Tab from "./Tab"
+import { useState } from "react"
 
 const App: React.FC = () => {
+  let [activeTab, setTab] = useState("")
 
   return (
     <>
@@ -8,21 +11,17 @@ const App: React.FC = () => {
 
       </nav>
       <div id="filesystem">
+        <h1>project name</h1>
+        <hr/>
 
       </div>
       <main>
         <div className="tabList">
-          <div className="tab">
-            File 1
-          </div>
-          <div className="tab">
-            File 2
-          </div>
-          <div className="tab">
-            File 3
-          </div>
+          <Tab TabName="File1" setTab={setTab}/>
+          <Tab TabName="File2" setTab={setTab}/>
+          <Tab TabName="File3" setTab={setTab}/>
         </div>
-        <div className="textField" contentEditable="true" spellCheck="false">
+        <div className="textField" contentEditable={activeTab!=""?"true":"false"} spellCheck="false">
 
         </div>
       </main>

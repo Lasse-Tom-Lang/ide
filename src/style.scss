@@ -25,6 +25,18 @@ nav {
   resize: horizontal;
   overflow: auto;
   background-color: #404040;
+
+  h1 {
+    padding: 4px;
+    font-size: 20px;
+    text-align: center;
+    color: #DDDDDD;
+    font-weight: 10;
+  }
+
+  hr {
+    border: 0.5px solid black;
+  }
 }
 
 #filesystem::-webkit-resizer {
