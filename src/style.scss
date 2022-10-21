@@ -34,6 +34,16 @@ nav {
     font-weight: 10;
   }
 
+  button {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    padding: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #BBBBBB;
+  }
+
   hr {
     border: 0.5px solid black;
   }

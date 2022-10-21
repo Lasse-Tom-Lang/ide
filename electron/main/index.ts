@@ -12,7 +12,7 @@ process.env.DIST_ELECTRON = join(__dirname, '..')
 process.env.DIST = join(process.env.DIST_ELECTRON, '../dist')
 process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST_ELECTRON, '../public')
 
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 
@@ -101,4 +101,10 @@ ipcMain.handle('open-win', (event, arg) => {
     childWindow.loadURL(`${url}/#${arg}`)
     // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
   }
+})
+
+ipcMain.on("openDirectory", async (event) => {
+  const {dialog} = require("electron")
+  let directroy = await dialog.showOpenDialog({properties: ["openDirectory"]})
+  event.sender.send("directoryOpened", directroy)
 })
