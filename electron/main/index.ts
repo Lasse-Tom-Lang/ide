@@ -15,6 +15,8 @@ process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST_E
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
+const fs = require("fs")
+const dir = require('node-dir')
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -104,7 +106,12 @@ ipcMain.handle('open-win', (event, arg) => {
 })
 
 ipcMain.on("openDirectory", async (event) => {
-  const {dialog} = require("electron")
   let directroy = await dialog.showOpenDialog({properties: ["openDirectory"]})
-  event.sender.send("directoryOpened", directroy)
+  dir.files(directroy.filePaths[0], "combine", (error, files:string[]) => {
+    files.forEach((file:string) => {
+      files[files.indexOf(file)] = file.substring(directroy.filePaths[0].length + 1)
+    });
+    let data = {filePaths: directroy.filePaths[0], canceled: directroy.canceled, files: files}
+    event.sender.send("directoryOpened", data)
+  });
 })

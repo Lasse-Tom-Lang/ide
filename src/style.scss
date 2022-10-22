@@ -47,6 +47,12 @@ nav {
   hr {
     border: 0.5px solid black;
   }
+
+  p {
+    padding: 4px;
+    color: white;
+    cursor: pointer;
+  }
 }
 
 #filesystem::-webkit-resizer {

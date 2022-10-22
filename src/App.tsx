@@ -5,7 +5,8 @@ const { ipcRenderer } = require("electron")
 
 interface project {
   name: string,
-  path: string
+  path: string,
+  files: string[]
 }
 
 const App: React.FC = () => {
@@ -16,10 +17,11 @@ const App: React.FC = () => {
     ipcRenderer.send("openDirectory");
   }
 
-  ipcRenderer.on("directoryOpened", (event, data:{filePaths:string[], canceled: boolean}) => {
+  ipcRenderer.on("directoryOpened", (event, data:{filePaths:string, canceled: boolean, files: string[]}) => {
     if (!data.canceled) {
-      let name = data.filePaths[0].split("/")[data.filePaths[0].split("/").length - 1]
-      selectProject({path: data.filePaths[0], name: name})
+      let name = data.filePaths.split("/")[data.filePaths.split("/").length - 1]
+      console.log(data.files)
+      selectProject({path: data.filePaths[0], name: name, files: data.files})
     }
   });
 
@@ -31,7 +33,9 @@ const App: React.FC = () => {
       <div id="filesystem">
         {project?<h1>{project.name}</h1>:<button onClick={openProject}>Open project</button>}
         <hr/>
-
+        { 
+          project?.files.map((file) => {if (![".git", ".DS_Store"].includes(file))return <p>{file}</p>})
+        }
       </div>
       <main>
         <div className="tabList">
