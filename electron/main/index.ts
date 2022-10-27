@@ -107,11 +107,17 @@ ipcMain.handle('open-win', (event, arg) => {
 
 ipcMain.on("openDirectory", async (event) => {
   let directroy = await dialog.showOpenDialog({properties: ["openDirectory"]})
-  dir.files(directroy.filePaths[0], "combine", (error, files:string[]) => {
+  dir.files(directroy.filePaths[0], "file", (error, files:string[]) => {
     files.forEach((file:string) => {
       files[files.indexOf(file)] = file.substring(directroy.filePaths[0].length + 1)
     });
-    let data = {filePaths: directroy.filePaths[0], canceled: directroy.canceled, files: files}
-    event.sender.send("directoryOpened", data)
+    dir.files(directroy.filePaths[0], "dir", (error, dirs:string[]) => {
+      dirs.forEach((dir:string) => {
+        dirs[dirs.indexOf(dir)] = dir.substring(directroy.filePaths[0].length + 1)
+      });
+      dirs = dirs.sort()
+      let data = {filePaths: directroy.filePaths[0], canceled: directroy.canceled, files: files, dirs: dirs}
+      event.sender.send("directoryOpened", data)
+    });
   });
 })
