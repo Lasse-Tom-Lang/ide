@@ -1,7 +1,10 @@
 import "./style.scss"
 import Tab from "./Tab"
 import Directory from "./Directory"
+import File from "./File"
 import { useState } from "react"
+import FolderIcon  from "./icons/folder-icon.png" 
+import GitIcon from "./icons/git-icon.png"
 const { ipcRenderer } = require("electron")
 
 interface project {
@@ -29,7 +32,8 @@ const App: React.FC = () => {
   return (
     <>
       <nav>
-
+        <img src={FolderIcon} style={{aspectRatio: "44 / 36"}}/>
+        <img src={GitIcon} style={{aspectRatio: "1", filter: "invert(90%)"}}/>
       </nav>
       <div id="filesystem">
         {project ? <h1>{project.name}</h1> : <button onClick={openProject}>Open project</button>}
@@ -37,13 +41,13 @@ const App: React.FC = () => {
         {
           project?.dirs.map((dir) => {
             if (!dir.split("/").includes(".git") && dir.split("/").length == 1) {
-              let subdirs:string[] = []
+              let subdirs: string[] = []
               project?.dirs.forEach((subdir) => {
                 if (subdir.startsWith(dir)) {
                   subdirs.push(subdir.substring(dir.length + 1))
                 }
               })
-              let files:string[] = []
+              let files: string[] = []
               project?.files.forEach((file) => {
                 if (file.startsWith(dir)) {
                   files.push(file.substring(dir.length + 1))
@@ -62,7 +66,7 @@ const App: React.FC = () => {
         {
           project?.files.map((file) => {
             if (![".DS_Store"].includes(file) && !file.split("/").includes(".git") && file.split("/").length == 1) {
-              return <p key={file + 1}>{file}</p>
+              return <File key={file + 1} name={file} />
             }
           })
         }

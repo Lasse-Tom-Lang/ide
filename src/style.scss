@@ -12,9 +12,19 @@
 }
 
 nav {
-  height: 100vh;
+  height: calc(100vh - 10px);
   width: 70px;
   background-color: #303030;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 10px;
+  gap: 10px;
+
+  img {
+    width: 50px;
+    cursor: pointer;
+  }
 }
 
 #filesystem {
@@ -53,9 +63,9 @@ nav {
     color: white;
     cursor: pointer;
     white-space: nowrap;
-    -webkit-user-select: none;  
-    -moz-user-select: none;    
-    -ms-user-select: none;      
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
   }
 }
