@@ -1,5 +1,6 @@
 import "./style.scss"
 import Tab from "./Tab"
+import Directory from "./Directory"
 import { useState } from "react"
 const { ipcRenderer } = require("electron")
 
@@ -43,9 +44,19 @@ const App: React.FC = () => {
         } */}
         {
           project?.dirs.map((dir) => {
-            if (!dir.split("/").includes(".git")) {
-              let transform = (dir.split("/").length - 1) * 10
-              return <p style={{translate: transform + "px"}}>{dir.split("/")[dir.split("/").length - 1]}</p>
+            if (!dir.split("/").includes(".git") && dir.split("/").length == 1) {
+              let subdirs:string[] = []
+              project?.dirs.forEach((subdir) => {
+                if (subdir.startsWith(dir)) {
+                  subdirs.push(subdir.substring(dir.length + 1))
+                }
+              })
+              return <Directory
+                directoryName={dir}
+                subdirectorys={subdirs}
+                key={dir + 1}
+                level={1}
+              />
             }
           })
         }
