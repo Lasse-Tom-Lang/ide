@@ -76,7 +76,7 @@ nav {
 }
 
 main {
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
 }
@@ -94,8 +94,6 @@ main {
 
 .tabList {
   height: 30px;
-  width: 100%;
-  display: flex;
   background-color: #CCCCCC;
 }
 

@@ -16,6 +16,7 @@ interface project {
 
 const App: React.FC = () => {
   let [activeTab, setTab] = useState("")
+  let [openTabs, openTab] = useState<string[]>([])
   let [project, selectProject] = useState<project>()
 
   const openProject = async () => {
@@ -59,6 +60,8 @@ const App: React.FC = () => {
                 key={dir + 1}
                 level={1}
                 files={files}
+                openTab={openTab}
+                openTabs={openTabs}
               />
             }
           })
@@ -66,16 +69,18 @@ const App: React.FC = () => {
         {
           project?.files.map((file) => {
             if (![".DS_Store"].includes(file) && !file.split("/").includes(".git") && file.split("/").length == 1) {
-              return <File key={file + 1} name={file} />
+              return <File key={file + 1} name={file} openTab={openTab} openTabs={openTabs}/>
             }
           })
         }
       </div>
       <main>
         <div className="tabList">
-          <Tab TabName="File1" setTab={setTab} />
-          <Tab TabName="File2" setTab={setTab} />
-          <Tab TabName="File3" setTab={setTab} />
+          {
+            openTabs.map((file) => {
+              return <Tab TabName={file} setTab={setTab} />
+            })
+          }
         </div>
         <div className="textField" contentEditable={activeTab != "" ? "true" : "false"} spellCheck="false">
 

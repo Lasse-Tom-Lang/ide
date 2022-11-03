@@ -6,6 +6,8 @@ interface DirectoryProbs {
   subdirectorys?: string[],
   files?: string[]
   level: number
+  openTab: React.Dispatch<React.SetStateAction<string[]>>
+  openTabs: string[]
 }
 
 const Directory: React.FC<DirectoryProbs> = (props) => {
@@ -40,6 +42,8 @@ const Directory: React.FC<DirectoryProbs> = (props) => {
                 key={dir + props.level}
                 level={props.level + 1}
                 files={files}
+                openTab={props.openTab}
+                openTabs={props.openTabs}
               />
             }
           })
@@ -47,7 +51,7 @@ const Directory: React.FC<DirectoryProbs> = (props) => {
         {
           props.files?.map((file) => {
             if (![".DS_Store"].includes(file) && !file.split("/").includes(".git") && file.split("/").length == 1 && file != "") {
-              return <File key={file + props.level} name={file.split("/")[file.split("/").length - 1]} />
+              return <File key={file + props.level} name={file.split("/")[file.split("/").length - 1]} openTab={props.openTab} openTabs={props.openTabs}/>
             }
           })
         }
