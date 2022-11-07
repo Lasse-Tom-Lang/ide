@@ -13,13 +13,14 @@ interface DirectoryProbs {
 const Directory: React.FC<DirectoryProbs> = (props) => {
   let [isOpen, open] = useState(false)
 
-  function openTab() {
+  function openDir() {
+    console.log("Close")
     open(isOpen ? false : true)
   }
 
   return (
     <>
-      <p onClick={openTab}>{props.directoryName}</p>
+      <p onClick={openDir}>{props.directoryName}</p>
       <div style={{ display: isOpen ? "block" : "none", translate: props.level * 10 + "px" }}>
         {
           props.subdirectorys?.map((dir) => {
@@ -51,7 +52,7 @@ const Directory: React.FC<DirectoryProbs> = (props) => {
         {
           props.files?.map((file) => {
             if (![".DS_Store"].includes(file[0]) && !file[0].split("/").includes(".git") && file[0].split("/").length == 1) {
-              return <File key={file[0] + props.level} name={[file[0], file[1]]} openTab={openTab} openTabs={props.openTabs} />
+              return <File key={file[0] + props.level} name={[file[0], file[1]]} openTab={props.openTab} openTabs={props.openTabs} />
             }
           })
         }
