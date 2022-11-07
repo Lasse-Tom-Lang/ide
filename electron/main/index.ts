@@ -107,17 +107,22 @@ ipcMain.handle('open-win', (event, arg) => {
 
 ipcMain.on("openDirectory", async (event) => {
   let directroy = await dialog.showOpenDialog({properties: ["openDirectory"]})
-  dir.files(directroy.filePaths[0], "file", (error, files:string[]) => {
+  dir.files(directroy.filePaths[0], "file", (error, files:any) => {
     files.forEach((file:string) => {
-      files[files.indexOf(file)] = file.substring(directroy.filePaths[0].length + 1)
+      files[files.indexOf(file)] = [file.substring(directroy.filePaths[0].length + 1), file]
     });
     dir.files(directroy.filePaths[0], "dir", (error, dirs:string[]) => {
+      dirs = dirs.sort()
       dirs.forEach((dir:string) => {
         dirs[dirs.indexOf(dir)] = dir.substring(directroy.filePaths[0].length + 1)
       });
-      dirs = dirs.sort()
       let data = {filePaths: directroy.filePaths[0], canceled: directroy.canceled, files: files, dirs: dirs}
       event.sender.send("directoryOpened", data)
     });
   });
+})
+
+ipcMain.on("openFile", async (event, filePath) => {
+  let data:string = fs.readFileSync(filePath)
+  event.sender.send("fileOpened", data)
 })

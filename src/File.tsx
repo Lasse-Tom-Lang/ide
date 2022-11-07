@@ -1,15 +1,15 @@
 interface FileProps {
-  name: string
+  name: string[]
   openTab: React.Dispatch<React.SetStateAction<string[]>>
   openTabs: string[]
 }
 
 const File: React.FC<FileProps> = (props) => {
   const openFile = () => {
-    props.openTab([...props.openTabs, ...[props.name]])
+    props.openTab([...props.openTabs, ...[props.name[1]]])
   }
   return (
-    <p onClick={openFile}>{props.name}</p>
+    <p onClick={openFile}>{props.name[0]}</p>
   )
 }
 
