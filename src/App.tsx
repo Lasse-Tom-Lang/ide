@@ -87,7 +87,7 @@ const App: React.FC = () => {
         <div className="tabList">
           {
             openTabs.map((file) => {
-              return <Tab TabName={file} setTab={setTab} />
+              return <Tab openTab={openTab} openTabs={openTabs} TabName={file} setTab={setTab} />
             })
           }
         </div>
