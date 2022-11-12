@@ -1,10 +1,10 @@
 import "./style.scss"
-import Tab from "./Tab"
 import Directory from "./Directory"
 import File from "./File"
 import { useEffect, useState } from "react"
 import FolderIcon from "./icons/folder-icon.png"
 import GitIcon from "./icons/git-icon.png"
+import Main from "./Main/Main"
 const { ipcRenderer } = require("electron")
 
 interface project {
@@ -83,20 +83,7 @@ const App: React.FC = () => {
           })
         }
       </div>
-      <main>
-        <div className="tabList">
-          {
-            openTabs.map((file) => {
-              return <Tab openTab={openTab} openTabs={openTabs} TabName={file} setTab={setTab} />
-            })
-          }
-        </div>
-        <div className="textField" contentEditable={activeTab != "" ? "true" : "false"} spellCheck="false">
-          {/* {
-            file
-          } */}
-        </div>
-      </main>
+      <Main activeTab={activeTab} setTab={setTab} openTab={openTab} openTabs={openTabs}/>
     </>
   )
 }
