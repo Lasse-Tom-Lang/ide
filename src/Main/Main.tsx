@@ -5,6 +5,7 @@ interface MainProps {
   openTab: React.Dispatch<React.SetStateAction<string[]>>
   openTabs: string[]
   activeTab: string
+  file: string
 }
 
 const Main: React.FC<MainProps> = (props) => {
@@ -18,9 +19,11 @@ const Main: React.FC<MainProps> = (props) => {
           }
         </div>
         <div className="textField" contentEditable={props.activeTab != "" ? "true" : "false"} spellCheck="false">
-          {/* {
-            file
-          } */}
+          {
+            props.file.toString().split(/\n/).map((line) =>
+              <>{line}<br/></>
+            )
+          }
         </div>
     </main>
   )

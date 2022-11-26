@@ -6,6 +6,7 @@ import FolderIcon from "./icons/folder-icon.png"
 import GitIcon from "./icons/git-icon.png"
 import Main from "./Main/Main"
 const { ipcRenderer } = require("electron")
+const fs = require("fs")
 
 interface project {
   name: string,
@@ -21,16 +22,15 @@ const App: React.FC = () => {
   let [file, openFile] = useState("")
 
   useEffect(() => {
-    ipcRenderer.send("openFile", activeTab)
+    if (activeTab != "") {
+      let file = fs.readFileSync(activeTab)
+      openFile(file)
+    }
   }, [activeTab])
 
   const openProject = async () => {
     ipcRenderer.send("openDirectory")
   }
-
-  ipcRenderer.on("fileOpened", (event: any, data: string) => {
-    openFile(data)
-  });
 
   ipcRenderer.on("directoryOpened", (event: any, data: { filePaths: string, canceled: boolean, files: string[][], dirs: string[] }) => {
     if (!data.canceled) {
@@ -83,7 +83,7 @@ const App: React.FC = () => {
           })
         }
       </div>
-      <Main activeTab={activeTab} setTab={setTab} openTab={openTab} openTabs={openTabs}/>
+      <Main file={file} activeTab={activeTab} setTab={setTab} openTab={openTab} openTabs={openTabs}/>
     </>
   )
 }

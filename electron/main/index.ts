@@ -43,6 +43,7 @@ async function createWindow() {
       preload,
       nodeIntegration: true,
       contextIsolation: false,
+      nodeIntegrationInWorker: true
     },
   })
 
@@ -120,9 +121,4 @@ ipcMain.on("openDirectory", async (event) => {
       event.sender.send("directoryOpened", data)
     });
   });
-})
-
-ipcMain.on("openFile", async (event, filePath) => {
-  //let data:string = fs.readFileSync(filePath)
-  //event.sender.send("fileOpened", data)
 })
