@@ -14,7 +14,6 @@ const Directory: React.FC<DirectoryProbs> = (props) => {
   let [isOpen, open] = useState(false)
 
   function openDir() {
-    console.log("Close")
     open(isOpen ? false : true)
   }
 

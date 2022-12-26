@@ -1,4 +1,5 @@
 import Tab from "./Tab"
+import parse from "html-react-parser"
 
 interface MainProps {
   setTab: React.Dispatch<React.SetStateAction<string>>
@@ -20,9 +21,13 @@ const Main: React.FC<MainProps> = (props) => {
         </div>
         <div className="textField" contentEditable={props.activeTab != "" ? "true" : "false"} spellCheck="false">
           {
-            props.file.toString().split(/\n/).map((line) =>
-              <>{line}<br/></>
-            )
+            props.file.toString()
+              .replace(/ /g, "\u00a0")
+              .replace(/[<]/g, "&lt;")
+              .replace(/[>]/g, "&gt;")
+              .split(/\n/).map((line) =>
+                <>{parse(line)}<br/></>
+              )
           }
         </div>
     </main>
