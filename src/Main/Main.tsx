@@ -1,6 +1,7 @@
 import Tab from "./Tab"
 import parse from "html-react-parser"
 import TypeScriptHighlight from "@/syntax/TypeScript"
+import PythonHighlight from "@/syntax/Python"
 import StandartHighlight from "@/syntax/Standart"
 
 interface MainProps {
@@ -15,6 +16,7 @@ const Main: React.FC<MainProps> = (props) => {
   let text = ""
   switch (props.activeTab.split(".")[props.activeTab.split(".").length - 1]) {
     case "ts": text = TypeScriptHighlight(props.file.toString()); break
+    case "py": text = PythonHighlight(props.file.toString()); break
     default: text = StandartHighlight(props.file.toString())
   }
   return (
