@@ -1,5 +1,7 @@
 import Tab from "./Tab"
 import parse from "html-react-parser"
+import TypeScriptHighlight from "@/syntax/TypeScript"
+import StandartHighlight from "@/syntax/Standart"
 
 interface MainProps {
   setTab: React.Dispatch<React.SetStateAction<string>>
@@ -10,6 +12,11 @@ interface MainProps {
 }
 
 const Main: React.FC<MainProps> = (props) => {
+  let text = ""
+  switch (props.activeTab.split(".")[props.activeTab.split(".").length - 1]) {
+    case "ts": text = TypeScriptHighlight(props.file.toString()); break
+    default: text = StandartHighlight(props.file.toString())
+  }
   return (
     <main>
       <div className="tabList">
@@ -21,20 +28,9 @@ const Main: React.FC<MainProps> = (props) => {
         </div>
         <div className="textField" contentEditable={props.activeTab != "" ? "true" : "false"} spellCheck="false">
           {
-            props.activeTab.split(".")[props.activeTab.split(".").length - 1] == "ts" ?
-              props.file.toString()
-                .replace(/ /g, "\u00a0")
-                .replace(/[<]/g, "&lt;")
-                .replace(/[>]/g, "&gt;")
-                .replace(/(let|var|const|interface)+\s+(\S*)+\s/g, "$1 <span style='color:red;'>$2</span> ")
-                .replace(/(interface |var |let |const |if|else|function)/g, "<span style='color:orange;'>$1</span>")
-                .replace(/({|}|\(|\))/g, "<span style='color:blue;'>$1</span>")
-                .replace(/("(.*?)")/g, "<span style='color:green'>$1</span>")
-                .split(/\n/).map((line) =>
+            text.split(/\n/).map((line) =>
                   <>{parse(line)}<br/></>
-                )
-                : 
-                props.file.toString().split(/\n/).map((line) => <>{parse(line)}<br/></>)
+            )
           }
         </div>
     </main>
