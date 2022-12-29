@@ -3,6 +3,7 @@ import parse from "html-react-parser"
 import TypeScriptHighlight from "@/syntax/TypeScript"
 import PythonHighlight from "@/syntax/Python"
 import StandartHighlight from "@/syntax/Standart"
+import { useRef } from "react"
 
 interface MainProps {
   setTab: React.Dispatch<React.SetStateAction<string>>
@@ -13,6 +14,21 @@ interface MainProps {
 }
 
 const Main: React.FC<MainProps> = (props) => {
+
+  const textFieldRef = useRef() as React.RefObject<HTMLDivElement>
+
+  function ReplaceBrackets(event:React.KeyboardEvent<HTMLDivElement>) {
+    let textAreaText = textFieldRef.current?.innerHTML as string
+    if (event.key == "<") {
+      event.preventDefault()
+      textAreaText = textAreaText.replace(/<(?!(span class='[A-z]{1,}'>)|(\/span>))/g, "&lt;")
+    }
+    if (event.key == ">") {
+      event.preventDefault()
+      textAreaText = textAreaText.replace(/(?<!(<span class='[A-z]{1,}')|(<\/span))>/g, "&gt;")
+    }
+  }
+
   let text = ""
   switch (props.activeTab.split(".")[props.activeTab.split(".").length - 1]) {
     case "ts": text = TypeScriptHighlight(props.file.toString()); break
@@ -28,7 +44,7 @@ const Main: React.FC<MainProps> = (props) => {
             })
           }
         </div>
-        <div className="textField" contentEditable={props.activeTab != "" ? "true" : "false"} spellCheck="false">
+        <div className="textField" ref={textFieldRef} onKeyDown={ReplaceBrackets} contentEditable={props.activeTab != "" ? "true" : "false"} spellCheck="false">
           {
             text.split(/\n/).map((line) =>
                   <>{parse(line)}<br/></>

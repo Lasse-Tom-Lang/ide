@@ -15,7 +15,6 @@ process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST_E
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
-const fs = require("fs")
 const dir = require('node-dir')
 
 // Disable GPU Acceleration for Windows 7
