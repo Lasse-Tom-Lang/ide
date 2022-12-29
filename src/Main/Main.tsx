@@ -17,24 +17,23 @@ const Main: React.FC<MainProps> = (props) => {
 
   const textFieldRef = useRef() as React.RefObject<HTMLDivElement>
 
-  function ReplaceBrackets(event:React.KeyboardEvent<HTMLDivElement>) {
-    let textAreaText = textFieldRef.current?.innerHTML as string
-    if (event.key == "<") {
-      event.preventDefault()
-      textAreaText = textAreaText.replace(/<(?!(span class='[A-z]{1,}'>)|(\/span>))/g, "&lt;")
-    }
-    if (event.key == ">") {
-      event.preventDefault()
-      textAreaText = textAreaText.replace(/(?<!(<span class='[A-z]{1,}')|(<\/span))>/g, "&gt;")
-    }
-  }
-
   let text = ""
   switch (props.activeTab.split(".")[props.activeTab.split(".").length - 1]) {
     case "ts": text = TypeScriptHighlight(props.file.toString()); break
     case "py": text = PythonHighlight(props.file.toString()); break
     default: text = StandartHighlight(props.file.toString())
   }
+
+  function ReplaceBrackets(event:React.KeyboardEvent<HTMLDivElement>) {
+    let textAreaText = textFieldRef.current?.innerHTML as string
+    if (event.key == "<") {
+      text = textAreaText.replace(/<(?!(span class='[A-z]{1,}'>)|(\/span>))/g, "&lt;")
+    }
+    if (event.key == ">") {
+      text = textAreaText.replace(/(?<!(<span class='[A-z]{1,}')|(<\/span))>/g, "&gt;")
+    }
+  }
+  
   return (
     <main>
       <div className="tabList">
