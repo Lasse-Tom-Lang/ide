@@ -1,5 +1,5 @@
 # IDE
 
-A modern IDE created with Electron, React and TypeScript
+This is a modern cloud-based IDE
 
 # ❗️ Work in progress
