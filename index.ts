@@ -48,6 +48,10 @@ app.get("/login.js", (req, res) => {
   res.sendFile(__dirname + "/public/login.js")
 })
 
+app.get("/home.js", (req, res) => {
+  res.sendFile(__dirname + "/public/home.js")
+})
+
 app.get("/checkLogin", async (req, res) => {
   const userName = req.query.userName as string
 
@@ -74,5 +78,41 @@ app.get("/checkLogin", async (req, res) => {
   }
   req.session.userID = user.id
   res.json({status: 1, user})
+  res.end()
+})
+
+app.get("/getDashboardData", async (req, res) => {
+  if (!req.session.userID) {
+    res.json({status: 0})
+    res.end()
+    return
+  }
+  const data = await prisma.user.findFirst({
+    where: {
+      id: req.session.userID
+    },
+    select: {
+      name: true,
+      id: true,
+      projects: {
+        select: {
+          name: true,
+          id: true,
+          user: {
+            select: {
+              name: true,
+              id: true
+            }
+          }
+        }
+      }
+    }
+  })
+  res.json({status: 1, data})
+  res.end()
+})
+
+app.get("/logout", (req, res) => {
+  req.session.userID = undefined
   res.end()
 })
