@@ -39,3 +39,8 @@
   width: 13rem !important;
   border-radius: 0 0 .5rem .5rem;
 }
+
+#errorField {
+  color: red;
+  margin-top: 1rem;
+}
