@@ -23,5 +23,14 @@ function addProjectToGrid(project: project) {
   let title = document.createElement("h2")
   title.innerText = project.name
   div.appendChild(title)
+  project.user.forEach(user => {
+    let userP = document.createElement("p")
+    userP.innerText = user.name
+    div.appendChild(userP)
+  })
+  let link = document.createElement("a")
+  link.href = `/editor/${project.id}`
+  link.innerText = "Open"
+  div.appendChild(link)
   dashboardProjectGrid.appendChild(div)
 }

@@ -52,6 +52,34 @@ app.get("/home.js", (req, res) => {
   res.sendFile(__dirname + "/public/home.js")
 })
 
+app.get("/editor/:projectID", async (req, res) => {
+  let projectID = req.params.projectID as string
+  let project = await prisma.project.findFirst({
+    where: {
+      id: projectID
+    },
+    select: {
+      user: {
+        select: {
+          id: true
+        }
+      }
+    }
+  })
+  let allow = false
+  project?.user.forEach(user => {
+    if (user.id == req.session.userID) {
+      allow = true
+      return
+    }
+  })
+  if (!allow) {
+    res.redirect("/")
+    return
+  }
+  res.sendFile(__dirname + "/public/editor/editor.html")
+})
+
 app.get("/checkLogin", async (req, res) => {
   const userName = req.query.userName as string
 

@@ -2,3 +2,5 @@
 projects
 *.js
 node_modules
+.env
+migrations
