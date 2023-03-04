@@ -90,3 +90,11 @@ body {
   bottom: 1rem;
   right: 1rem;
 }
+
+#editorWindow {
+  margin: 1rem;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  outline: 0;
+}

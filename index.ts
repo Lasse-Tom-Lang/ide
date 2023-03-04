@@ -52,6 +52,10 @@ app.get("/home.js", (req, res) => {
   res.sendFile(__dirname + "/public/home.js")
 })
 
+app.get("/editor/editor.js", (req, res) => {
+  res.sendFile(__dirname + "/public/editor/editor.js")
+})
+
 app.get("/editor/:projectID", async (req, res) => {
   let projectID = req.params.projectID as string
   let project = await prisma.project.findFirst({
