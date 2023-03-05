@@ -41,34 +41,87 @@ function addProjectToGrid(project: project) {
 
 function syntaxHighlight() {
   text = text
-  .replace(
-    /\n/g,
-    "<br>"
-  ).replace(
-    /(let|var|const|interface)+\s+(\S*)+\s/g,
-    "$1 <span style='color:red;'>$2</span> "
-  ).replace(
-    /(interface|\svar |\slet |\sconst |if|else|function|import|from|await|async|for)/g,
-    "<span style='color:orange;'>$1</span>"
-  ).replace(
-    /("([\s\S]*?)")/g,
-    "<span style='color:green'>$1</span>"
-  ).replace(
-    /((\/{2})+.*)/g,
-    "<span style='color:lightgreen'>$1</span>"
-  ).replace(
-    /  /g,
-    "&nbsp;&nbsp;"
-  )
+    .replace(
+      /\n/g,
+      "<br>"
+    ).replace(
+      /(let|var|const|interface)+\s+(\S*)+\s/g,
+      "$1 <span style='color:red;'>$2</span> "
+    ).replace(
+      /(interface|var |let |const |if|else|function|import|from|await|async|for)/g,
+      "<span style='color:orange;'>$1</span>"
+    ).replace(
+      /("([\s\S]*?)")/g,
+      "<span style='color:green'>$1</span>"
+    ).replace(
+      /((\/{2})+.*)/g,
+      "<span style='color:lightgreen'>$1</span>"
+    ).replace(
+      /  /g,
+      "&nbsp;&nbsp;"
+    )
+}
+
+function setCaretPosition(caretPosition: number, selection: Selection) {
+  const updatedRange = document.createRange();
+  const walker = document.createTreeWalker(
+    editorWindow,
+    NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT
+  );
+
+  let currentNode = walker.nextNode();
+  let charCount = 0;
+
+  while (currentNode) {
+    if (currentNode.nodeType === Node.TEXT_NODE) {
+      const textLength = currentNode.textContent!.length;
+      if (charCount + textLength >= caretPosition) {
+        updatedRange.setStart(currentNode, caretPosition - charCount);
+        break;
+      } else {
+        charCount += textLength;
+      }
+    } else if (currentNode.nodeType === Node.ELEMENT_NODE) {
+      let currentNodeElement = currentNode as HTMLElement
+      if (currentNodeElement.contentEditable === "false") {
+        charCount += 1;
+      }
+    }
+
+    currentNode = walker.nextNode();
+  }
+
+  updatedRange.collapse(true);
+  selection.removeAllRanges();
+  selection.addRange(updatedRange);
+}
+
+function getCaretPosition(selection: Selection) {
+  const range = selection!.getRangeAt(0)
+  const newRange = document.createRange()
+  newRange.setStart(editorWindow, 0)
+  newRange.setEnd(range.startContainer, range.startOffset)
+  const textBeforeCursor = newRange.toString()
+  const caretPosition = textBeforeCursor.length
+  return caretPosition
 }
 
 syntaxHighlight()
 
 editorWindow.innerHTML = text
 
-editorWindow.addEventListener("keyup", () => {
+editorWindow.addEventListener("keyup", (event:KeyboardEvent) => {
+  
+  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter"].includes(event.code)) {
+    return
+  }
+  
+  const selection = window.getSelection() as Selection
+  let caretPosition = getCaretPosition(selection)
+
   text = editorWindow.innerText
-  console.log(text)
   syntaxHighlight()
   editorWindow.innerHTML = text
+
+  setCaretPosition(caretPosition, selection)
 })
