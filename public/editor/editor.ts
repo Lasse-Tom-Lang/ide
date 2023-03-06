@@ -46,9 +46,9 @@ function syntaxHighlight() {
       "<br>"
     ).replace(
       /(let|var|const|interface)+\s+(\S*)+\s/g,
-      "$1 <span style='color:red;'>$2</span> "
+      "$1\u00A0<span style='color:red;'>$2</span>\u00A0"
     ).replace(
-      /(interface|var |let |const |if|else|function|import|from|await|async|for)/g,
+      /(interface|var\s|let\s|const\s|if|else|function|import\s|from|await|async|for)/g,
       "<span style='color:orange;'>$1</span>"
     ).replace(
       /("([\s\S]*?)")/g,
@@ -124,4 +124,16 @@ editorWindow.addEventListener("keyup", (event:KeyboardEvent) => {
   editorWindow.innerHTML = text
 
   setCaretPosition(caretPosition, selection)
+})
+
+editorWindow.addEventListener("keydown", (event:KeyboardEvent) => {
+  if (event.key == "Tab") {
+    event.preventDefault();
+    var selection = window.getSelection() as Selection;
+    var range = selection.getRangeAt(0);
+    var textNode = document.createTextNode("\u00A0\u00A0");
+    range.insertNode(textNode);
+    let caretPosition = getCaretPosition(selection)
+    setCaretPosition(caretPosition + 2, selection)
+  }
 })
