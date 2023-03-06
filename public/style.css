@@ -8,6 +8,10 @@ body {
   background-color: #444;
 }
 
+main {
+  display: flex;
+}
+
 #loginForm {
   position: absolute;
   top: 50%;
@@ -93,8 +97,22 @@ body {
 
 #editorWindow {
   margin: 1rem;
-  background-color: white;
+  background-color: #bbb;
   padding: 1rem;
   border-radius: 1rem;
   outline: 0;
+  overflow: scroll;
+  height: calc(100vh - 4rem);
+  width: calc(100vw - 17rem);
+  white-space:nowrap;
+}
+
+nav {
+  margin: 1rem;
+  margin-right: 0;
+  padding: 1rem;
+  background-color: #bbb;
+  border-radius: 1rem;
+  width: 10rem;
+  height: calc(100vh - 4rem);
 }
