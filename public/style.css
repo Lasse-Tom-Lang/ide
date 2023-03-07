@@ -116,3 +116,11 @@ nav {
   width: 10rem;
   height: calc(100vh - 4rem);
 }
+
+nav div {
+  padding: .5rem;
+  margin: .25rem;
+  background-color: rgba(200, 200, 200, .6);
+  cursor: pointer;
+  border-radius: .5rem;
+}

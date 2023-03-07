@@ -2,6 +2,7 @@ import express from "express"
 import sessions from "express-session"
 import { PrismaClient } from '@prisma/client'
 import { createHash } from 'crypto'
+import directoryTree from "directory-tree"
 
 const app = express()
 const oneDay = 86400000
@@ -54,6 +55,10 @@ app.get("/home.js", (req, res) => {
 
 app.get("/editor/editor.js", (req, res) => {
   res.sendFile(__dirname + "/public/editor/editor.js")
+})
+
+app.get("/editor/explorer.js", (req, res) => {
+  res.sendFile(__dirname + "/public/editor/explorer.js")
 })
 
 app.get("/editor/:projectID", async (req, res) => {
@@ -146,5 +151,39 @@ app.get("/getDashboardData", async (req, res) => {
 
 app.get("/logout", (req, res) => {
   req.session.userID = undefined
+  res.end()
+})
+
+app.get("/getFiles", async (req, res) => {
+  let projectID = req.query.projectID as string
+  if (!projectID) {
+    res.end()
+    return
+  }
+  let projectUsers = await prisma.project.findFirst({
+    where: {
+      id: projectID
+    },
+    select: {
+      user: {
+        select: {
+          id: true
+        }
+      }
+    }
+  })
+  let isMemeber = false
+  projectUsers?.user.forEach(user => {
+    if (user.id == req.session.userID) {
+      isMemeber = true
+      return
+    }
+  })
+  if (!isMemeber) {
+    res.end()
+    return
+  }
+  var tree = directoryTree(`./projects/${req.query.projectID}`)
+  res.json(tree)
   res.end()
 })

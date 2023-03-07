@@ -14,3 +14,9 @@ interface dashboardData {
   name: string,
   projects: project[]
 }
+
+interface files {
+  path: string,
+  name: string,
+  children?: files[]
+}
