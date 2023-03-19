@@ -3,6 +3,7 @@ import sessions from "express-session"
 import { PrismaClient } from '@prisma/client'
 import { createHash } from 'crypto'
 import directoryTree from "directory-tree"
+import fs from "fs"
 
 const app = express()
 const oneDay = 86400000
@@ -186,4 +187,45 @@ app.get("/getFiles", async (req, res) => {
   var tree = directoryTree(`./projects/${req.query.projectID}`)
   res.json(tree)
   res.end()
+})
+
+app.get("/getFile", async (req, res) => {
+  let file = req.query.file as string
+  if (!file) {
+    res.end()
+    return
+  }
+  let projectUsers = await prisma.project.findFirst({
+    where: {
+      id: file.split("/")[1]
+    },
+    select: {
+      user: {
+        select: {
+          id: true
+        }
+      }
+    }
+  })
+  let isMemeber = false
+  projectUsers?.user.forEach(user => {
+    if (user.id == req.session.userID) {
+      isMemeber = true
+      return
+    }
+  })
+  if (!isMemeber) {
+    res.end()
+    return
+  }
+  
+  res.set({
+    "Content-Type": "text/plain"
+  });
+  if (fs.existsSync(__dirname + "/" + req.query.file)) {
+    res.sendFile(__dirname + "/" + req.query.file)
+  }
+  else {
+    res.end()
+  }
 })

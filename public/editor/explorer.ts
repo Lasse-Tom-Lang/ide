@@ -33,6 +33,16 @@ function addExplorerElement(name: string, path: string, parent: HTMLElement) {
         };
       }
     }
+    else {
+      let path = target.parentElement!.getAttribute("data-path") as string
+      fetch(`/getFile?file=${path}`)
+        .then(data => data.text())
+        .then(data => {
+          text = data
+          syntaxHighlight()
+          editorWindow.innerHTML = text
+        })
+    }
   })
   div.appendChild(label)
   parent.appendChild(div)
