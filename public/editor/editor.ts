@@ -48,7 +48,7 @@ function syntaxHighlight() {
       /(let|var|const|interface)+\s+(\S*)+\s/g,
       "$1\u00A0<span style='color:red;'>$2</span>\u00A0"
     ).replace(
-      /(interface|var\s|let\s|const\s|if|else|function|import\s|from|await|async|for)/g,
+      /(interface|var\s|let\s|const\s|if|else|function|fetch|import\s|from|await|async|for)/g,
       "<span style='color:orange;'>$1</span>"
     ).replace(
       /("([\s\S]*?)")/g,

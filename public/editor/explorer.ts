@@ -7,8 +7,34 @@ let files: files
 
 function addExplorerElement(name: string, path: string, parent: HTMLElement) {
   let div = document.createElement("div")
-  div.innerText = name
+  let label = document.createElement("p")
+  label.innerText = name
   div.setAttribute("data-path", path)
+  if (parent != nav) {
+    div.style.display = "none"
+  }
+  label.addEventListener("click", (event: Event) => {
+    let target = event.target as HTMLElement
+    let children = target.parentElement!.children as HTMLCollection
+    let firstChild = children[1] as HTMLElement
+    if (firstChild) {
+      if (firstChild.style.display == "none") {
+        for (let i = 0; i < children.length; i++) {
+          if (i == 0) continue
+          let child = children[i] as HTMLElement
+          child.style.display = "block"
+        };
+      }
+      else if (firstChild.style.display == "block") {
+        for (let i = 0; i < children.length; i++) {
+          if (i == 0) continue
+          let child = children[i] as HTMLElement
+          child.style.display = "none"
+        };
+      }
+    }
+  })
+  div.appendChild(label)
   parent.appendChild(div)
 }
 
