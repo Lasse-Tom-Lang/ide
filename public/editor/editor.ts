@@ -100,3 +100,13 @@ editorWindow.addEventListener("keydown", (event:KeyboardEvent) => {
     setCaretPosition(caretPosition + 2, selection)
   }
 })
+
+document.querySelector("body")?.addEventListener("contextmenu", (event:Event) => {
+  event.preventDefault()
+})
+
+document.addEventListener('keydown', (event:KeyboardEvent) => {
+  if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+    event.preventDefault();
+  }
+});

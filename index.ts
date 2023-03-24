@@ -42,6 +42,12 @@ app.get("/login", (req, res) => {
   res.sendFile(__dirname + "/public/login.html")
 })
 
+app.get("/logout", (req, res) => {
+  req.session.userID = undefined
+  res.redirect("/login")
+  return
+})
+
 app.get("/style.css", (req, res) => {
   res.sendFile(__dirname + "/public/style.css")
 })
