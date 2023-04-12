@@ -1,4 +1,5 @@
-const editorWindow = document.getElementById("editorWindow") as HTMLTextAreaElement
+const editorWindow = document.getElementById("textWindow") as HTMLTextAreaElement
+const lineNumbers = document.getElementById("lineNumbers") as HTMLDivElement
 
 let text = ""
 
@@ -69,9 +70,15 @@ function getCaretPosition(selection: Selection) {
   return caretPosition
 }
 
-syntaxHighlight()
-
-editorWindow.innerHTML = text
+function setLineNumbers() {
+  lineNumbers.innerHTML = ""
+  let lines = text.split("<br>").length
+  for (let i = 1; i <= lines; i++) {
+    let span = document.createElement("span")
+    span.innerText = i.toString()
+    lineNumbers.appendChild(span)
+  }
+}
 
 editorWindow.addEventListener("keyup", (event:KeyboardEvent) => {
   
@@ -85,6 +92,7 @@ editorWindow.addEventListener("keyup", (event:KeyboardEvent) => {
   text = editorWindow.innerText
   syntaxHighlight()
   editorWindow.innerHTML = text
+  setLineNumbers()
 
   setCaretPosition(caretPosition, selection)
 })

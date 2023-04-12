@@ -41,6 +41,7 @@ function addExplorerElement(name: string, path: string, parent: HTMLElement) {
           text = data
           syntaxHighlight()
           editorWindow.innerHTML = text
+          setLineNumbers()
         })
     }
   })
